@@ -12,14 +12,27 @@
     <button id="backBtn">← Back</button>
   </div>
 
-  <label>Work (minutes)</label>
-  <input type="number" id="work">
+  <div class="settings-group">
+    <label>Original (Focus)</label>
+    <input type="number" id="focusWork" min="1">
 
-  <label>Short Break (minutes)</label>
-  <input type="number" id="short">
+    <label>Short (Focus)</label>
+    <input type="number" id="focusShort" min="1">
 
-  <label>Long Break (minutes)</label>
-  <input type="number" id="long">
+    <label>Long (Focus)</label>
+    <input type="number" id="focusLong" min="1">
+
+    <hr>
+
+    <label>Short Break</label>
+    <input type="number" id="breakShort" min="1">
+
+    <label>Long Break</label>
+    <input type="number" id="breakLong" min="1">
+
+    <label>Super Long Break</label>
+    <input type="number" id="breakSuper" min="1">
+  </div>
 
   <script src="settings.js"></script>
 </body>

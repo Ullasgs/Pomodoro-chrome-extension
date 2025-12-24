@@ -12,11 +12,15 @@ body.dark {
   --accent: #34d399;
 }
 
+/* 🔴 Break mode */
+body.break-mode {
+  --accent: #ef4444;
+}
+
 * {
   box-sizing: border-box;
 }
 
-/* 🔒 FORCE FULL HEIGHT */
 html, body {
   height: 100%;
   margin: 0;
@@ -27,11 +31,10 @@ body {
   background: var(--bg);
   color: var(--text);
 
-  /* 🔑 This fixes the 3/4 height issue */
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   padding: 16px;
+  gap: 14px;
 }
 
 /* ---------- HEADER ---------- */
@@ -48,19 +51,10 @@ body {
   cursor: pointer;
 }
 
-/* ---------- FOCUS / BREAK PAGES ---------- */
-#focusPage,
-#breakPage {
-  flex: 1;                /* 🔑 makes page fill remaining space */
-  display: flex;
-  flex-direction: column;
-}
-
-/* ---------- WORK / SHORT / LONG ---------- */
+/* ---------- MODE SELECTOR ---------- */
 .mode-selector {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
 }
 
 .mode-btn {
@@ -79,9 +73,9 @@ body {
   color: white;
 }
 
-/* ---------- TIMER ---------- */
+/* ---------- MAIN CONTENT ---------- */
 .timer-container {
-  flex: 1;                /* 🔑 center timer vertically */
+  flex: 1;                 /* THIS is the main vertical spacer */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,11 +121,10 @@ body {
   transform-origin: center;
 }
 
-/* ---------- START / RESET ---------- */
+/* ---------- BOTTOM STACK ---------- */
 .controls {
   display: flex;
   gap: 12px;
-  margin-top: 12px;
 }
 
 .control-btn {
@@ -153,11 +146,10 @@ body {
   color: white;
 }
 
-/* ---------- FOCUS / BREAK SLIDER ---------- */
+/* ---------- FOCUS / BREAK ---------- */
 .fb-toggle {
   display: flex;
   gap: 12px;
-  margin-top: 12px;
 }
 
 .fb-btn {
@@ -178,7 +170,6 @@ body {
 
 /* ---------- CUSTOM ---------- */
 .custom-btn {
-  margin-top: 12px;
   width: 100%;
   padding: 14px;
   border-radius: 14px;
@@ -188,6 +179,18 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
+
+/* ---------- HIDDEN ---------- */
 [hidden] {
   display: none !important;
 }
+.spacer-md {
+  height: 30px;  /* looser */
+}
+#timer,
+#breakTimer {
+  font-size: 52px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
