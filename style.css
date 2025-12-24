@@ -1,0 +1,193 @@
+:root {
+  --bg: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  --card: rgba(0,0,0,0.08);
+  --text: #111;
+  --accent: #10b981;
+}
+
+body.dark {
+  --bg: linear-gradient(135deg, #1f2933 0%, #111827 100%);
+  --card: rgba(255,255,255,0.12);
+  --text: #fff;
+  --accent: #34d399;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 🔒 FORCE FULL HEIGHT */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+
+  /* 🔑 This fixes the 3/4 height issue */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#themeToggle {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* ---------- FOCUS / BREAK PAGES ---------- */
+#focusPage,
+#breakPage {
+  flex: 1;                /* 🔑 makes page fill remaining space */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- WORK / SHORT / LONG ---------- */
+.mode-selector {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--card);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mode-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* ---------- TIMER ---------- */
+.timer-container {
+  flex: 1;                /* 🔑 center timer vertically */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-circle {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.timer-circle svg {
+  position: absolute;
+  inset: 0;
+}
+
+.timer-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#timer {
+  font-size: 52px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: var(--card);
+  stroke-width: 8;
+}
+
+.circle-progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+/* ---------- START / RESET ---------- */
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.control-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.control-btn.secondary {
+  background: var(--card);
+  color: var(--text);
+}
+
+.control-btn:not(.secondary) {
+  background: var(--accent);
+  color: white;
+}
+
+/* ---------- FOCUS / BREAK SLIDER ---------- */
+.fb-toggle {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.fb-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.fb-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* ---------- CUSTOM ---------- */
+.custom-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: var(--card);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+}
+[hidden] {
+  display: none !important;
+}

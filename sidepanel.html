@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pomodoro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>🍅 Pomodoro</h1>
+    <button id="themeToggle">🌙</button>
+  </div>
+
+  <!-- ========== FOCUS PAGE ========== -->
+  <div id="focusPage">
+
+    <!-- WORK / SHORT / LONG (UNCHANGED) -->
+    <div class="mode-selector">
+      <button class="mode-btn active" data-mode="work">Work</button>
+      <button class="mode-btn" data-mode="short">Short</button>
+      <button class="mode-btn" data-mode="long">Long</button>
+    </div>
+
+    <!-- TIMER -->
+    <div class="timer-container">
+      <div class="timer-circle">
+        <svg width="200" height="200">
+          <circle class="circle-bg" cx="100" cy="100" r="90"></circle>
+          <circle class="circle-progress" cx="100" cy="100" r="90" id="progressCircle"></circle>
+        </svg>
+        <div class="timer-text">
+          <div id="timer">25:00</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== BREAK PAGE ========== -->
+  <div id="breakPage" hidden>
+    <h2>Break</h2>
+    <p>This is the break page.</p>
+  </div>
+
+  <!-- START / RESET (PUT BACK BELOW TIMER) -->
+  <div class="controls">
+    <button class="control-btn" id="startPause">Start</button>
+    <button class="control-btn secondary" id="reset">Reset</button>
+  </div>
+
+  <!-- FOCUS / BREAK VIEW SWITCH (BELOW START/RESET) -->
+  <div class="fb-toggle">
+    <button class="fb-btn active" id="focusTab">Focus</button>
+    <button class="fb-btn" id="breakTab">Break</button>
+  </div>
+
+  <!-- CUSTOM (LAST) -->
+  <button class="custom-btn" id="openSettings">⚙️ Custom</button>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
