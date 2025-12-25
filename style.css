@@ -242,3 +242,53 @@ body {
 .spacer-md {
   height: 25px;    /* was 30px */
 }
+
+.sound-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#muteToggle {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#volumeSlider {
+  width: 80px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.sound-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+#soundButton,
+#muteToggle {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#soundPanel {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: var(--card);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+}
+
+#volumeSlider {
+  width: 80px;
+  accent-color: var(--accent);
+}

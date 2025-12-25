@@ -1,4 +1,4 @@
-const defaults = {
+const DEFAULTS = {
   focus: {
     work: 25,
     short: 5,
@@ -11,62 +11,38 @@ const defaults = {
   }
 };
 
-function load() {
-  return JSON.parse(localStorage.getItem('durations')) || defaults;
-}
+// ---------- LOAD ----------
+chrome.storage.local.get(['durations'], (res) => {
+  const data = res.durations || DEFAULTS;
 
-function save(data) {
-  localStorage.setItem('durations', JSON.stringify(data));
-}
+  document.getElementById('focus-work').value = data.focus.work;
+  document.getElementById('focus-short').value = data.focus.short;
+  document.getElementById('focus-long').value = data.focus.long;
 
-const data = load();
-
-// ---------- INPUTS ----------
-const inputs = {
-  focus: {
-    work: document.getElementById('focusWork'),
-    short: document.getElementById('focusShort'),
-    long: document.getElementById('focusLong')
-  },
-  break: {
-    short: document.getElementById('breakShort'),
-    long: document.getElementById('breakLong'),
-    super: document.getElementById('breakSuper')
-  }
-};
-
-// ---------- INIT ----------
-Object.keys(inputs.focus).forEach(k => {
-  inputs.focus[k].value = data.focus[k];
-});
-
-Object.keys(inputs.break).forEach(k => {
-  inputs.break[k].value = data.break[k];
+  document.getElementById('break-short').value = data.break.short;
+  document.getElementById('break-long').value = data.break.long;
+  document.getElementById('break-super').value = data.break.super;
 });
 
 // ---------- SAVE ----------
-Object.values(inputs.focus).forEach(input =>
-  input.addEventListener('change', persist)
-);
-
-Object.values(inputs.break).forEach(input =>
-  input.addEventListener('change', persist)
-);
-
-function persist() {
-  save({
+document.getElementById('saveBtn').onclick = () => {
+  const durations = {
     focus: {
-      work: +inputs.focus.work.value,
-      short: +inputs.focus.short.value,
-      long: +inputs.focus.long.value
+      work: Number(document.getElementById('focus-work').value),
+      short: Number(document.getElementById('focus-short').value),
+      long: Number(document.getElementById('focus-long').value)
     },
     break: {
-      short: +inputs.break.short.value,
-      long: +inputs.break.long.value,
-      super: +inputs.break.super.value
+      short: Number(document.getElementById('break-short').value),
+      long: Number(document.getElementById('break-long').value),
+      super: Number(document.getElementById('break-super').value)
     }
+  };
+
+  chrome.storage.local.set({ durations }, () => {
+    window.location.href = 'sidepanel.html';
   });
-}
+};
 
 // ---------- BACK ----------
 document.getElementById('backBtn').onclick = () => {
