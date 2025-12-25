@@ -2,6 +2,7 @@ let interval = null;
 let isRunning = false;
 let view = 'focus';
 
+
 // ---------- DURATIONS ----------
 const FOCUS = {
   work: 25 * 60,
@@ -19,6 +20,18 @@ const BREAK = {
 let focusMode = 'work';
 let breakMode = 'short';
 let time = FOCUS[focusMode];
+let focusRemaining = {
+  work: FOCUS.work,
+  short: FOCUS.short,
+  long: FOCUS.long
+};
+
+let breakRemaining = {
+  short: BREAK.short,
+  long: BREAK.long,
+  super: BREAK.super
+};
+
 
 // ---------- ELEMENTS ----------
 const focusPage = document.getElementById('focusPage');
@@ -38,6 +51,7 @@ const resetBtn = document.getElementById('reset');
 const focusTab = document.getElementById('focusTab');
 const breakTab = document.getElementById('breakTab');
 const themeToggle = document.getElementById('themeToggle');
+
 
 // ---------- SVG ----------
 const circumference = 2 * Math.PI * 90;
@@ -85,16 +99,45 @@ function stopTimer() {
 }
 
 function tick() {
-  time--;
-
-  if (time <= 0) {
-    stopTimer();
-    view === 'focus' ? switchToBreak(true) : switchToFocus();
-    return;
+  if (view === 'focus') {
+    focusRemaining[focusMode]--;
+    time = focusRemaining[focusMode];
+  } else {
+    breakRemaining[breakMode]--;
+    time = breakRemaining[breakMode];
   }
+
+if (time <= 0) {
+  time = 0;
+
+  if (view === 'focus') {
+    focusRemaining[focusMode] = 0;
+    updateFocusDisplay();
+  } else {
+    breakRemaining[breakMode] = 0;
+    updateBreakDisplay();
+  }
+
+  stopTimer();
+
+  setTimeout(() => {
+    if (view === 'focus') {
+      // 🔑 RESET FOCUS FOR NEXT CYCLE
+      focusRemaining[focusMode] = FOCUS[focusMode];
+      switchToBreak(true);
+    } else {
+      // 🔑 RESET BREAK FOR NEXT CYCLE
+      breakRemaining[breakMode] = BREAK[breakMode];
+      switchToFocus();
+    }
+  }, 300);
+
+  return;
+}
 
   view === 'focus' ? updateFocusDisplay() : updateBreakDisplay();
 }
+
 
 startPauseBtn.onclick = () => {
   if (isRunning) {
@@ -108,17 +151,29 @@ startPauseBtn.onclick = () => {
 
 resetBtn.onclick = () => {
   stopTimer();
-  view === 'focus' ? switchToFocus() : switchToBreak(false);
+
+  if (view === 'focus') {
+    focusRemaining[focusMode] = FOCUS[focusMode];
+    time = focusRemaining[focusMode];
+    updateFocusDisplay();
+  } else {
+    breakRemaining[breakMode] = BREAK[breakMode];
+    time = breakRemaining[breakMode];
+    updateBreakDisplay();
+  }
 };
 
 // ---------- MODE BUTTONS ----------
 focusButtons.forEach(btn => {
   btn.onclick = () => {
     if (isRunning) return;
+
     focusButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+
     focusMode = btn.dataset.mode;
-    time = FOCUS[focusMode];
+    time = focusRemaining[focusMode]; // 🔑 restore paused time
+
     updateFocusDisplay();
   };
 });
@@ -126,10 +181,13 @@ focusButtons.forEach(btn => {
 breakButtons.forEach(btn => {
   btn.onclick = () => {
     if (isRunning) return;
+
     breakButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+
     breakMode = btn.dataset.break;
-    time = BREAK[breakMode];
+    time = breakRemaining[breakMode]; // 🔑 restore paused time
+
     updateBreakDisplay();
   };
 });
@@ -145,12 +203,11 @@ function switchToFocus() {
 
   breakPage.hidden = true;
   focusPage.hidden = false;
-  forceReflow(focusPage);
 
   focusTab.classList.add('active');
   breakTab.classList.remove('active');
 
-  time = FOCUS[focusMode];
+  time = focusRemaining[focusMode];
   updateFocusDisplay();
 }
 
@@ -160,20 +217,21 @@ function switchToBreak(forceShort) {
 
   focusPage.hidden = true;
   breakPage.hidden = false;
-  forceReflow(breakPage); // 🔑 THIS FIXES STYLING
 
-  focusTab.classList.remove('active');
-  breakTab.classList.add('active');
-
-  if (forceShort) breakMode = 'short';
+  if (forceShort && breakRemaining[breakMode] <= 0) {
+    breakMode = 'short';
+    breakRemaining[breakMode] = BREAK[breakMode];
+  }
 
   breakButtons.forEach(b =>
     b.classList.toggle('active', b.dataset.break === breakMode)
   );
 
-  time = BREAK[breakMode];
+  time = breakRemaining[breakMode];
   updateBreakDisplay();
 }
+
+
 
 focusTab.onclick = () => {
   if (isRunning) return;
