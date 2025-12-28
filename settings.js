@@ -48,3 +48,19 @@ document.getElementById('saveBtn').onclick = () => {
 document.getElementById('backBtn').onclick = () => {
   window.location.href = 'sidepanel.html';
 };
+
+document.getElementById('resetDefaultsBtn').onclick = () => {
+
+  // update inputs
+  document.getElementById('focus-work').value = DEFAULTS.focus.work;
+  document.getElementById('focus-short').value = DEFAULTS.focus.short;
+  document.getElementById('focus-long').value = DEFAULTS.focus.long;
+
+  document.getElementById('break-short').value = DEFAULTS.break.short;
+  document.getElementById('break-long').value = DEFAULTS.break.long;
+  document.getElementById('break-super').value = DEFAULTS.break.super;
+
+  // save immediately
+  chrome.storage.local.set({ durations: DEFAULTS });
+};
+

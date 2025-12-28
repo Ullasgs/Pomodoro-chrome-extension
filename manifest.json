@@ -18,7 +18,7 @@
     "default_title": "Pomodoro"
   },
   "icons": {
-    "128": "icon.png"
+    "128": "/attach/icon.png"
   }
   
 }

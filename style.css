@@ -2,19 +2,20 @@
   --bg: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
   --card: rgba(0,0,0,0.08);
   --text: #111;
-  --accent: #10b981;
+  --accent: #4477CE;
 }
 
 body.dark {
-  --bg: linear-gradient(135deg, #1f2933 0%, #111827 100%);
+  /*--bg: linear-gradient(0deg, #290025 40% ,#4F0147  50%);*/
+  --bg: linear-gradient(180deg, #030637 40%, #070F2B 50% );
   --card: rgba(255,255,255,0.12);
   --text: #fff;
-  --accent: #34d399;
+  --accent: #F2A07B;
 }
 
 /* 🔴 Break mode */
 body.break-mode {
-  --accent: #ef4444;
+  --accent: #91C4C3;
 }
 
 * {
@@ -22,6 +23,7 @@ body.break-mode {
 }
 
 html, body {
+  height: 100% ;
   margin: 0;
 }
 
@@ -291,4 +293,8 @@ body {
 #volumeSlider {
   width: 80px;
   accent-color: var(--accent);
+}
+
+#volumeimage{
+  height: 15px;
 }

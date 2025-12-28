@@ -9,6 +9,8 @@ let BREAK = { short: 5 * 60, long: 10 * 60, super: 15 * 60 };
 /* ---------- STATE ---------- */
 let focusMode = 'work';
 let breakMode = 'short';
+let mouseInsidePanel = false;
+
 
 let focusRemaining = { ...FOCUS };
 let breakRemaining = { ...BREAK };
@@ -58,7 +60,7 @@ themeToggle.onclick = () => {
 };
 
 /* ---------- SOUND ---------- */
-const alarmSound = new Audio(chrome.runtime.getURL('alarm.mp3'));
+const alarmSound = new Audio(chrome.runtime.getURL('/attach/alarm.mp3'));
 
 let volume = Number(localStorage.getItem('volume'));
 if (isNaN(volume)) volume = 0.8;
@@ -95,6 +97,13 @@ volumeSlider.oninput = () => {
   localStorage.setItem('lastVolume', lastVolume);
   updateMuteIcon();
 };
+document.body.addEventListener('mouseenter', () => {
+  mouseInsidePanel = true;
+});
+
+document.body.addEventListener('mouseleave', () => {
+  mouseInsidePanel = false;
+});
 
 soundButton.onclick = (e) => {
   e.stopPropagation();
@@ -131,6 +140,20 @@ function stopTimer() {
   isRunning = false;
   startPauseBtn.textContent = 'Start';
 }
+document.addEventListener('keydown', (e) => {
+  // Only react to Space
+  if (e.code !== 'Space') return;
+
+  // Ignore if typing in inputs or sliders
+  const tag = document.activeElement.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+  e.preventDefault(); // prevent page scroll
+
+  // Toggle start / pause
+  startPauseBtn.click();
+});
+   
 
 function tick() {
   if (view === 'focus') {
@@ -244,11 +267,25 @@ breakTab.onclick = () => !isRunning && switchToBreak(false);
 
 /* ---------- NAVIGATION ---------- */
 openSettingsBtn.onclick = () => {
-  window.location.href = 'settings.html';
+  const runtimeState = {
+    view,
+    focusMode,
+    breakMode,
+    time,
+    focusRemaining,
+    breakRemaining,
+    isRunning
+  };
+
+  chrome.storage.local.set({ runtimeState }, () => {
+    window.location.href = 'settings.html';
+  });
 };
 
 /* ---------- LOAD SETTINGS + INIT ---------- */
-chrome.storage.local.get(['durations'], (res) => {
+chrome.storage.local.get(['durations', 'runtimeState'], (res) => {
+
+  /* ---- LOAD DURATIONS ---- */
   if (res.durations) {
     const d = res.durations;
 
@@ -263,10 +300,39 @@ chrome.storage.local.get(['durations'], (res) => {
       long: d.break.long * 60,
       super: d.break.super * 60
     };
-
-    focusRemaining = { ...FOCUS };
-    breakRemaining = { ...BREAK };
   }
 
-  switchToFocus();
+  /* ---- RESTORE RUNTIME STATE ---- */
+  if (res.runtimeState) {
+    ({
+      view,
+      focusMode,
+      breakMode,
+      time,
+      focusRemaining,
+      breakRemaining,
+      isRunning
+    } = res.runtimeState);
+
+    if (view === 'focus') {
+      switchToFocus();
+    } else {
+      switchToBreak(false);
+    }
+
+    if (isRunning) {
+      interval = setInterval(tick, 1000);
+      startPauseBtn.textContent = 'Pause';
+    } else {
+      startPauseBtn.textContent = 'Start';
+    }
+
+  } else {
+    focusRemaining = { ...FOCUS };
+    breakRemaining = { ...BREAK };
+    switchToFocus();
+  }
+
+  // cleanup (optional but recommended)
+  chrome.storage.local.remove('runtimeState');
 });
